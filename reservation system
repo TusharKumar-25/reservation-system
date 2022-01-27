@@ -1,0 +1,444 @@
+# reservation-system
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+//USE IT IN GDB COMPILER
+
+                        //RESERVATION SYSTEM//
+/* 
+
+CONCEPTS USED 
+1.INPUT OUTPUT 
+2.FILES
+3.POINTERS 
+4.STRINGS  
+5.SWITCH AND BREAK STATEMENT 
+6.GOTO 
+7.TYPEDEF 
+8.ARRAY
+9.RANDOM INTEGER GENERATION
+10.FUNTIONS 
+
+*/
+
+
+/************************HEADER FILES******************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+/*****************************STRUCTURE DECLARATION****************************/
+typedef struct details
+{
+    int train_no;
+    char coach[5];
+    int seat_no;
+    int berth[5];
+    char p_f_name[100];
+    char p_l_name[100];
+    char sex[5];
+    int age;
+    int m_no;
+} pd; 
+
+/******************FUNCTION PROTOTYPE*******************/
+
+void reservation(void);							//main reservation function
+void viewdetails(void);							//view details of all the trains
+void cancel(void);
+void printticket(char p_f_name[],char p_l_name[],int,int,float);	//print ticket
+void traindata(int);						//print data related to specific train
+float charge(int,int);                      //charge automatically w.r.t number of seats and train
+void login();                                  // LOGIN function
+void exitt(void);                            //EXIT funtion
+
+/*********************MAIN SYSTEM BODY*******************/
+
+int main()
+{
+
+	printf("\t\t=================================================\n");
+	printf("\t\t|                                               |\n");
+	printf("\t\t|         ----------------------------          |\n");
+	printf("\t\t|          WELCOME TO INDIAN RAILWAYS           |\n");
+	printf("\t\t|             RESERVATION SYSTEM                |\n");
+	printf("\t\t|         ----------------------------          |\n");
+	printf("\t\t|                                               |\n");
+	printf("\t\t|                                               |\n");
+	printf("\t\t=================================================\n\n\n");
+	start:
+	login();                    //LOGIN FUNCTION CALLED
+	start2:
+	printf("\nSERVICES\n");
+	printf("\n");
+	printf("1. RESERVATION\n");
+	printf("2. VIEW TRAIN DETAILS\n");
+	printf("3. CANCEL\n");
+	printf("4. EXIT\n");
+	int choice;
+    printf("\n");
+	printf("Enter your choice : ");
+	scanf("%d",&choice);
+
+	switch(choice)                             //SWITCH IS USED
+	{
+	    case 1:
+	      reservation();
+	      break;     
+	    case 2:
+	      viewdetails();
+	      break;
+	    case 3:
+	     cancel();
+	      goto start2;
+	     break;
+
+	    case 4:
+	     exitt();
+	     goto start;
+	     break;
+	    default :
+	       printf("Invalid choice\n");  
+	} 
+
+	goto start2;
+
+    return 0;
+}
+
+/********************************DETAILS***********************************************************/
+
+void  viewdetails(void)
+{
+     printf("==========================================================================================");
+	printf("\nTr.No\tName\t\t\tDestinations\t\t\tCharges\t\tTime\n");
+	printf("==========================================================================================");
+	printf("\n12345\tRapti Ganga\t\tDehradun to Muzaffarpur\t\tRs.680\t\t09:00am");
+	printf("\n12346\tChauri Chaura Epress\tKanpur to Patna\t\t\tRs.510\t\t12:00pm");
+	printf("\n12347\tBhag Express\t\tLucknow to Kolkata\t\tRs.450\t\t08:00am");
+	printf("\n12348\tHumsafar Express\tBhopal to Jalandhar\t\tRs.430\t\t11:00am");
+	printf("\n12349\tRajdhani Express\tDelhi to Samastipur\t\tRs.830\t\t07:00am");
+	printf("\n12350\tSarabadi Express\tTamilnadu to Patna\t\tRs.660\t\t09:30am");
+    printf("\n12351\tVandebharat Express\tHajipur to Nagpur \t\tRs.960\t\t01:00pm");
+    printf("\n12352\tVikramshila Express\tPatna to Darbhanga\t\tRs.120\t\t04:00pm");
+    printf("\n12353\tMagadh Express\t\tJammu To Patna\t\t\tRs.600\t\t03:35pm");
+    printf("\n12354\tVaishali Express\tLondon To Paris\t\t\tRs.720\t\t04:15pm");
+
+    printf("\n======================================");
+    printf("\n\tTHANK YOU \t\t\n");
+    printf("======================================");
+
+} 
+
+/*****************************RESERVATION*****************************/
+
+
+void reservation(void)
+{
+    int n;
+    printf("Enter total number of passenger : ");
+    scanf("%d",&n);
+    pd e,x;                               //STRUCTURE VARIABLE DEFINED
+    float charges;
+    char confirm;
+    FILE *ptr;                       // FILE POINTER 
+    start3:
+    printf("\n");
+
+    ptr=fopen("Seats_reserved.txt","a");                  //FILE OPEN
+
+    printf("Enter train number : ");
+     scanf("%d",&x.train_no);
+    	if(x.train_no>=12345 && x.train_no<=12354)
+	{
+
+    printf("\n");
+
+    printf("Detials of passenger\n");
+    printf("Enter first name : ");
+    scanf("%s",e.p_f_name);
+    printf("Enter Last name : ");
+    scanf("%s",e.p_l_name);
+    printf("Age : ");
+    scanf("%d",&e.age);
+    printf("Sex (M/F) : ");
+    scanf("%s",e.sex);
+    printf("Enter mobile number : ");
+    scanf("%d",&e.m_no);
+    printf("\n");
+
+
+
+		charges=charge(x.train_no,n);
+
+		printticket(e.p_f_name,e.p_l_name,n,x.train_no,charges);
+	}
+
+	else
+	{
+		printf("\nInvalid train Number! Enter again--> ");
+		goto start3;
+	}
+
+	printf("\n\nConfirm Ticket (y/n):>");
+	start:
+	scanf(" %c",&confirm);
+	if(confirm == 'y')
+	{  
+		fprintf(ptr,"%s %s\t %d\t\t %s\t\t %.2f\n",e.p_f_name,e.p_l_name,x.train_no,e.sex,charges); 
+		printf("==================");
+		printf("\n Reservation Done\n");
+		printf(" charge :- %.2f\n",charges);
+		printf("==================");
+		printf("\nPress any key to go back to Main menu\n");
+
+	}
+
+
+	else
+	{
+		if(confirm=='n'){
+			printf("\nReservation Not Done!\nPress any key to go back to  Main menu!\n");
+		}
+		else
+		{
+			printf("\nInvalid choice entered! Enter again-----> ");
+		    goto start;                                                  
+		}
+
+	}
+		fclose(ptr);                    //FILE CLOSED
+
+}
+
+/**********************************CHARGES**********************************************/
+
+float charge(int train_num,int n)
+{
+		if (train_num==12345)
+	{
+		return(680.0*n);
+	}
+	if (train_num==12346)
+	{
+		return(510.0*n);
+	}
+	if (train_num==12347)
+	{
+		return(450.0*n);
+	}
+	if (train_num==12348)
+	{
+		return(430.0*n);
+	}
+	if (train_num==12349)
+	{
+		return(830.0*n);
+	}
+	if (train_num==12350)
+	{
+		return(660.0*n);
+	}
+	if (train_num==12351)
+	{
+		return(960.0*n);
+	}
+	if (train_num==12352)
+	{
+		return(120.0*n);
+	}
+	if (train_num==12353)
+	{
+		return(600.0*n);
+	}
+	if (train_num==12354)
+	{
+		return(720.0*n);
+	}
+}
+
+/********************************PRINT TICKET*******************************************************/
+
+void printticket(char p_f_name[],char p_l_name[],int n,int train_no,float charges)
+{
+	system("cls");
+	int number;
+	srand(time(0));
+    number=rand()%100 + 1; //generate a random number
+	printf("-------------------\n");
+	printf("\tTICKET\n");
+	printf("-------------------\n\n");
+
+
+	printf("Name: %s %s",p_f_name,p_l_name);
+	printf("\nNumber Of Seats:\t%d",n);
+	printf("\nTrain Number:\t\t%d",train_no);
+	traindata(train_no);
+	printf("\nCharges:\t\t%.2f",charges);
+	printf("\nberth number : %d",number);
+}
+
+/********************************TRAIN DATA************************************************/
+
+void traindata(int train_num)
+{
+
+	if (train_num==12345)
+	{
+		printf("\nTrain:\t\t\tRapti Ganga");
+		printf("\nDestination:\t\tDehradun to Muzaffarpur");
+		printf("\nDeparture:\t\t0900 hours");
+	}
+	if (train_num==12346)
+	{
+		printf("\nTrain:\t\t\tChauri Chaura");
+		printf("\nDestination:\t\tKanpur to Patna");
+		printf("\nDeparture:\t\t1200 hours");
+	}
+	if (train_num==12347)
+	{
+		printf("\nTrain:\t\t\tBhag Express");
+		printf("\nDestination:\t\tLucknow to Kolkata");
+		printf("\nDeparture:\t\t0800 hours");
+	}
+	if (train_num==12348)
+	{
+		printf("\nTrain:\t\t\tHumsafar Express");
+		printf("\nDestination:\t\tBhopal to Jalandhar");
+		printf("\nDeparture:\t\t1100 hours ");
+	}
+	if (train_num==12349)
+	{
+		printf("\nTrain:\t\t\tRajdhani Express");
+		printf("\nDestination:\t\tDelhi to Samastipur");
+		printf("\nDeparture:\t\t0700 hours");
+	}
+	if (train_num==12350)
+	{
+		printf("\ntrain:\t\t\tSarabadi Express");
+		printf("\nDestination:\t\tTamilnadu to Patna");
+		printf("\nDeparture:\t\t0930 hours ");
+	}
+	if (train_num==12351)
+	{
+		printf("\ntrain:\t\t\tVandebharat Express");
+		printf("\nDestination:\t\tHajipur to Nagpur");
+		printf("\nDeparture:\t\t1300 hours");
+	}
+	if (train_num==12352)
+	{
+		printf("\ntrain:\t\t\tVikramshila Express");
+		printf("\n Destination:\t\tPatna to Darbhanga");
+		printf("\nDeparture:\t\t1600 hours ");
+	}
+	if (train_num==123453)
+	{
+		printf("\ntrain:\t\t\tMagadh Express");
+		printf("\nDestination:\t\tJammu to Patna");
+		printf("\nDeparture:\t\t1535 hours");
+	}
+	if (train_num==12354)
+	{
+		printf("\ntrain:\t\t\tVaishali Express");
+		printf("\nDestination:\t\tLondon to Paris");
+		printf("\nDeparture:\t\t1615 hours");
+	}
+}
+
+/*********************************LOGIN***************************************************/
+
+void login()
+{
+	int a=0,i=0;
+    char uname[10],c=' ';
+    char pword[10],code[10];                      //STRINGS AND ARRAYS
+    char user[10]="user";
+    char pass[10]="pass";
+    do
+{
+
+    printf("\n  =======================  LOGIN FORM  =======================\n  ");
+    printf(" \n          (user)             ENTER USERNAME:-");
+	scanf("%s", &uname);
+	printf(" \n          (pass)             ENTER PASSWORD:-");
+	while(i<10)
+	{
+	    pword[i]=getch();
+	    c=pword[i];
+	    if(c==13) break;
+
+	    i++;
+	}
+	pword[i]='\0';
+	char code=pword;
+	i=0;
+	scanf("%s",&pword);
+		if(strcmp(uname,"user")==0 && strcmp(pword,"pass")==0)
+	{
+	printf("  \n\n\n       WELCOME TO OUR SYSTEM !! YOUR LOGIN IS SUCCESSFUL");
+	printf("\n\n\n\t\t\t\tPress any key to continue...\n");
+
+	break;
+	}
+	else
+	{
+		printf("\n        SORRY !!!!  LOGIN IS UNSUCESSFUL");
+		a++;
+
+		getch();//holds the screen
+		system("cls");
+	}
+}
+	while(a<=2);
+	if (a>2)
+	{
+		printf("\nSorry you have entered the wrong username and password for four times!!!");
+
+		getch();
+
+		}
+
+}
+
+/*******************************EXIT FROM THE USER ACCOUNT**********************************/
+ void exitt(void)
+ {
+     printf("\nEXIT\n");
+     printf("========================\n");
+     printf("THANK YOU\nVISIT AGAIN\n");
+     printf("========================\n");
+ }
+
+/********************************TICKET CANCELLATION********************************/
+void cancel (void)
+{
+    pd x,e;
+    printf("\nEnter train number : ");
+    scanf("%d",&x.train_no);
+    printf("Enter first name : ");
+    scanf("%s",e.p_f_name);
+    printf("Enter Last name : ");
+    scanf("%s",e.p_l_name);
+    printf("Enter berth number : ");
+    scanf("%d",e.berth);
+
+if (remove("Seats_reserved.txt") == 0) {
+        printf("\nReservation cancelled.\n");
+        printf("Refund will be done within 2 business days\n");
+        printf("========================\n");
+        printf("THANK YOU\nVISIT AGAIN\n");
+        printf("========================\n");
+    } else {
+        printf("Not cancelled.");
+    }
+}
+
+//              THANK YOU                //
